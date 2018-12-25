@@ -22,10 +22,10 @@ public class LinkService {
 
     public String getShortLink(String link) {
 
-        Link findLink = repository.findByFullUrl(link);
+        Link findLink = repository.findByOriginal(link);
 
         if (findLink != null) {
-            return findLink.getShortUrl();
+            return findLink.getLink();
         }
 
         String key = murmur3_32().hashString(link, StandardCharsets.UTF_8).toString();
@@ -36,16 +36,16 @@ public class LinkService {
 
     public String redirect(String shortUrl) {
 
-        Link link = repository.findByShortUrl(shortUrl);
+        Link link = repository.findByLink(shortUrl);
         if(link == null) {
             return null; //TODO вернуть статус
         }
 
-        int counter = link.getCounter();
-        link.setCounter(new AtomicInteger(counter).incrementAndGet());
+        int counter = link.getCount();
+        link.setCount(new AtomicInteger(counter).incrementAndGet());
 
         repository.save(link);
 
-        return link.getFullUrl();
+        return link.getOriginal();
     }
 }

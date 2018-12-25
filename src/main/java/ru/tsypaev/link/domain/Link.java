@@ -1,6 +1,8 @@
 package ru.tsypaev.link.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -14,14 +16,18 @@ public class Link {
     private Long id;
 
     @Column(name = "link", nullable = false)
-    private String shortUrl;
+    private String link;
 
     @Column(name = "original", nullable = false)
-    private String fullUrl;
+    private String original;
 
     @Column(name = "count", nullable = false)
-    private int counter = new AtomicInteger(0).get();
+    private int count = new AtomicInteger(0).get();
 
+    @Column(name = "rank", nullable = false)
+    private int rank;
+
+    @JsonIgnore
     public Long getId() {
         return id;
     }
@@ -30,36 +36,44 @@ public class Link {
         this.id = id;
     }
 
-    public String getShortUrl() {
-        return shortUrl;
+    public String getLink() {
+        return link;
     }
 
-    public void setShortUrl(String shortUrl) {
-        this.shortUrl = shortUrl;
+    public void setLink(String link) {
+        this.link = link;
     }
 
-    public String getFullUrl() {
-        return fullUrl;
+    public String getOriginal() {
+        return original;
     }
 
-    public void setFullUrl(String fullUrl) {
-        this.fullUrl = fullUrl;
+    public void setOriginal(String original) {
+        this.original = original;
     }
 
-    public int getCounter() {
-        return counter;
+    public int getCount() {
+        return count;
     }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
     }
 
     public Link() {
     }
 
-    public Link(String shortUrl, String fullUrl) {
-        this.shortUrl = shortUrl;
-        this.fullUrl = fullUrl;
+    public Link(String link, String original) {
+        this.link = link;
+        this.original = original;
     }
 
 }
