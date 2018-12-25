@@ -21,11 +21,11 @@ public class Link {
     @Column(name = "original", nullable = false)
     private String original;
 
+    @Column(name = "rank")
+    private Long rank;
+
     @Column(name = "count", nullable = false)
     private int count = new AtomicInteger(0).get();
-
-    @Column(name = "rank", nullable = false)
-    private int rank;
 
     @JsonIgnore
     public Long getId() {
@@ -60,11 +60,11 @@ public class Link {
         this.count = count;
     }
 
-    public int getRank() {
+    public Long getRank() {
         return rank;
     }
 
-    public void setRank(int rank) {
+    public void setRank(Long rank) {
         this.rank = rank;
     }
 

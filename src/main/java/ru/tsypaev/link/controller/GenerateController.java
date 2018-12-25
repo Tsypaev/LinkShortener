@@ -18,7 +18,7 @@ public class GenerateController {
         return linkService.getShortLink(url);
     }
 
-    @GetMapping("/l/{shortUrl}")
+    @GetMapping("/l/{shortUrl}") //TODO без /generate
     String getFullLink(@PathVariable String shortUrl) {
         return linkService.redirect(shortUrl);
     }
