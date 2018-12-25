@@ -1,22 +1,28 @@
 package ru.tsypaev.link.domain;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
+@Table(name = "LINKS")
 public class Link {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    public Link(String name) {
-        this.name = name;
-    }
+    @Column(name = "link", nullable = false)
+    private String shortUrl;
+
+    @Column(name = "original", nullable = false)
+    private String fullUrl;
+
+    @Column(name = "count", nullable = false)
+    private int counter = new AtomicInteger(0).get();
 
     public Long getId() {
-
         return id;
     }
 
@@ -24,13 +30,36 @@ public class Link {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getShortUrl() {
+        return shortUrl;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setShortUrl(String shortUrl) {
+        this.shortUrl = shortUrl;
     }
 
-    private String name;
+    public String getFullUrl() {
+        return fullUrl;
+    }
+
+    public void setFullUrl(String fullUrl) {
+        this.fullUrl = fullUrl;
+    }
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
+    public Link() {
+    }
+
+    public Link(String shortUrl, String fullUrl) {
+        this.shortUrl = shortUrl;
+        this.fullUrl = fullUrl;
+    }
+
 }
