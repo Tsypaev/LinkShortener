@@ -29,38 +29,41 @@ public class LinkService {
         this.repository = repository;
     }
 
-    public Map<String, String> getShortLink(Map<String, String> url) {
+    public Map<String, String> createShortLink(Map<String, String> originalLinkMap) {
 
-        String link = url.get("original");
+        String originalLink = originalLinkMap.get("original");
 
-        if (!link.startsWith("http://") && !link.startsWith("https://")) {
+        if (!originalLink.startsWith("http://") && !originalLink.startsWith("https://")) {
             throw new InvalidUrlException();
         }
 
-        Link findLink = repository.findByOriginal(link);
+        Link originalLinkFromDb = repository.findByOriginal(originalLink);
 
-        if (findLink != null) {
+        if (originalLinkFromDb != null) {
             throw new ExistInDbException();
         }
+        
+        String shortUrl = murmur3_32().hashString(originalLink, StandardCharsets.UTF_8).toString();
 
-        Map<String, String> genLinks = new HashMap<>();
+        repository.save(new Link(shortUrl, originalLink));
+        updateRanks();
 
-        String key = murmur3_32().hashString(link, StandardCharsets.UTF_8).toString();
+        Map<String, String> shortLinkMap = new HashMap<>();
 
-        repository.save(new Link(key, link));
-        setRanks();
+        String shortLink = createUri(shortUrl);
+        shortLinkMap.put("link", shortLink);
 
-        String shortUrl = createUri(key);
-        genLinks.put("link", shortUrl);
-
-        return genLinks;
+        return shortLinkMap;
     }
 
-    private String createUri(String key) {
-        Map<String, String> uriVariables = new HashMap<>();
-        uriVariables.put("key", key);
-        UriTemplate template = new UriTemplate("/l/{key}");
-        return template.expand(uriVariables).toString();
+    private String createUri(String shortUrl) {
+
+        Map<String, String> uriMap = new HashMap<>();
+
+        uriMap.put("uri", shortUrl);
+        UriTemplate template = new UriTemplate("/l/{uri}");
+
+        return template.expand(uriMap).toString();
     }
 
     public URI redirect(String shortUrl) throws URISyntaxException {
@@ -74,12 +77,12 @@ public class LinkService {
         link.setCount(new AtomicInteger(counter).incrementAndGet());
 
         repository.save(link);
-        setRanks();
+        updateRanks();
 
         return new URI(link.getOriginal());
     }
 
-    private void setRanks(){
+    private void updateRanks(){
         Link[] orderList = getOrderList().toArray(new Link[0]);
         for (int i = 0; i < orderList.length; i++) {
             orderList[i].setRank((long) i+1);
