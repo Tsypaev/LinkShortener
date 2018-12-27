@@ -15,7 +15,6 @@ public interface LinkRepository extends CrudRepository<Link, Long>, PagingAndSor
     Link findByOriginal(String original);
 
     List<Link> findAllByOrderByCountDesc();
-
 }
 
 
