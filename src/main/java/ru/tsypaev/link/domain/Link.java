@@ -52,20 +52,20 @@ public class Link {
         this.original = original;
     }
 
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
     public int getRank() {
         return rank;
     }
 
     public void setRank(int rank) {
         this.rank = rank;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public Link() {
@@ -75,5 +75,4 @@ public class Link {
         this.link = link;
         this.original = original;
     }
-
 }
