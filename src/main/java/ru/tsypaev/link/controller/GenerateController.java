@@ -19,9 +19,4 @@ public class GenerateController {
     Map<String, String> shorterLink(@RequestBody String url) {
         return linkService.getShortLink(url);
     }
-
-    @GetMapping("/l/{shortUrl}") //TODO без /generate
-    String getFullLink(@PathVariable String shortUrl) {
-        return linkService.redirect(shortUrl);
-    }
 }
