@@ -22,7 +22,7 @@ public class Link {
     private String original;
 
     @Column(name = "rank")
-    private Long rank;
+    private int rank;
 
     @Column(name = "count", nullable = false)
     private int count = new AtomicInteger(0).get();
@@ -60,11 +60,11 @@ public class Link {
         this.count = count;
     }
 
-    public Long getRank() {
+    public int getRank() {
         return rank;
     }
 
-    public void setRank(Long rank) {
+    public void setRank(int rank) {
         this.rank = rank;
     }
 

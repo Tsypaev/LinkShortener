@@ -42,7 +42,7 @@ public class LinkService {
         if (originalLinkFromDb != null) {
             throw new ExistInDbException();
         }
-        
+
         String shortUrl = murmur3_32().hashString(originalLink, StandardCharsets.UTF_8).toString();
 
         repository.save(new Link(shortUrl, originalLink));
@@ -66,10 +66,11 @@ public class LinkService {
         return template.expand(uriMap).toString();
     }
 
-    public URI redirect(String shortUrl) throws URISyntaxException {
+    public URI getOriginalByShortUrl(String shortUrl) throws URISyntaxException {
 
         Link link = repository.findByLink(shortUrl);
-        if(link == null) {
+
+        if (link == null) {
             throw new NoDataFoundException();
         }
 
@@ -82,15 +83,18 @@ public class LinkService {
         return new URI(link.getOriginal());
     }
 
-    private void updateRanks(){
-        Link[] orderList = getOrderList().toArray(new Link[0]);
-        for (int i = 0; i < orderList.length; i++) {
-            orderList[i].setRank((long) i+1);
-            repository.save(orderList[i]);
+    private void updateRanks() {
+
+        Link[] orderLinkList = getOrderLinkList().toArray(new Link[0]);
+
+        for (int rownum = 0; rownum < orderLinkList.length; rownum++) {
+            orderLinkList[rownum].setRank(rownum + 1);
+            repository.save(orderLinkList[rownum]);
         }
     }
 
-    private List<Link> getOrderList() {
+    private List<Link> getOrderLinkList() {
+
         return repository.findAllByOrderByCountDesc();
     }
 }

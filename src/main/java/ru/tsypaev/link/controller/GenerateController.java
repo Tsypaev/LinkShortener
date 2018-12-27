@@ -17,6 +17,7 @@ public class GenerateController {
 
     @PostMapping
     Map<String, String> getShortLink(@RequestBody Map<String, String> url) {
+
         return linkService.createShortLink(url);
     }
 }

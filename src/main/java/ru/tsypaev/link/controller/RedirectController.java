@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tsypaev.link.service.LinkService;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
@@ -21,7 +22,10 @@ public class RedirectController {
     }
 
     @GetMapping("/l/{shortUrl}")
-    ResponseEntity getFullLink(@PathVariable String shortUrl) throws URISyntaxException {
-        return ResponseEntity.status(HttpStatus.FOUND).location(linkService.redirect(shortUrl)).build();
+    ResponseEntity redirect(@PathVariable String shortUrl) throws URISyntaxException {
+
+        URI original = linkService.getOriginalByShortUrl(shortUrl);
+
+        return ResponseEntity.status(HttpStatus.FOUND).location(original).build();
     }
 }
