@@ -3,6 +3,10 @@ package ru.tsypaev.link.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
 import ru.tsypaev.link.domain.Link;
+import ru.tsypaev.link.exception.ExistInDbException;
+import ru.tsypaev.link.exception.InvalidUrlException;
+import ru.tsypaev.link.exception.NoDataFoundException;
+import ru.tsypaev.link.exception.NoRequestBody;
 import ru.tsypaev.link.repository.LinkRepository;
 
 import java.nio.charset.StandardCharsets;
@@ -10,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.google.common.hash.Hashing.murmur3_32;
 
@@ -24,15 +30,24 @@ public class LinkService {
         this.repository = repository;
     }
 
-    public Map<String, String> getShortLink(String link) {
-        Map<String, String> genLinks = new HashMap<>();
+    public Map<String, String> getShortLink(Map<String, String> url) {
+
+        String link = url.get("original");
+
+        if (!link.startsWith("http://") && !link.startsWith("https://")) {
+            throw new InvalidUrlException();
+        }
+
         Link findLink = repository.findByOriginal(link);
 
         if (findLink != null) {
-            return genLinks; //TODO вернуть статус
+            throw new ExistInDbException();
         }
 
+        Map<String, String> genLinks = new HashMap<>();
+
         String key = murmur3_32().hashString(link, StandardCharsets.UTF_8).toString();
+
         repository.save(new Link(key, link));
         setRanks();
 
@@ -53,7 +68,7 @@ public class LinkService {
 
         Link link = repository.findByLink(shortUrl);
         if(link == null) {
-            return null; //TODO вернуть статус
+            throw new NoDataFoundException();
         }
 
         int counter = link.getCount();
