@@ -6,16 +6,15 @@ import ru.tsypaev.link.domain.Link;
 import ru.tsypaev.link.exception.ExistInDbException;
 import ru.tsypaev.link.exception.InvalidUrlException;
 import ru.tsypaev.link.exception.NoDataFoundException;
-import ru.tsypaev.link.exception.NoRequestBody;
 import ru.tsypaev.link.repository.LinkRepository;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.google.common.hash.Hashing.murmur3_32;
 
@@ -64,7 +63,7 @@ public class LinkService {
         return template.expand(uriVariables).toString();
     }
 
-    public String redirect(String shortUrl) {
+    public URI redirect(String shortUrl) throws URISyntaxException {
 
         Link link = repository.findByLink(shortUrl);
         if(link == null) {
@@ -77,7 +76,7 @@ public class LinkService {
         repository.save(link);
         setRanks();
 
-        return link.getOriginal();
+        return new URI(link.getOriginal());
     }
 
     private void setRanks(){
