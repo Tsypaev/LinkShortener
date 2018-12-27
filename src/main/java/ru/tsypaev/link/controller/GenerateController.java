@@ -3,6 +3,8 @@ package ru.tsypaev.link.controller;
 import org.springframework.web.bind.annotation.*;
 import ru.tsypaev.link.service.LinkService;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/generate")
 public class GenerateController {
@@ -14,7 +16,7 @@ public class GenerateController {
     }
 
     @PostMapping
-    String shorterLink(@RequestBody String url) {
+    Map<String, String> shorterLink(@RequestBody String url) {
         return linkService.getShortLink(url);
     }
 

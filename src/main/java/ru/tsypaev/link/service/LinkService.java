@@ -1,11 +1,14 @@
 package ru.tsypaev.link.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriTemplate;
 import ru.tsypaev.link.domain.Link;
 import ru.tsypaev.link.repository.LinkRepository;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.google.common.hash.Hashing.murmur3_32;
@@ -21,19 +24,29 @@ public class LinkService {
         this.repository = repository;
     }
 
-    public String getShortLink(String link) {
-
+    public Map<String, String> getShortLink(String link) {
+        Map<String, String> genLinks = new HashMap<>();
         Link findLink = repository.findByOriginal(link);
 
         if (findLink != null) {
-            return findLink.getLink();
+            return genLinks; //TODO вернуть статус
         }
 
         String key = murmur3_32().hashString(link, StandardCharsets.UTF_8).toString();
         repository.save(new Link(key, link));
         setRanks();
 
-        return key;
+        String shortUrl = createUri(key);
+        genLinks.put("link", shortUrl);
+
+        return genLinks;
+    }
+
+    private String createUri(String key) {
+        Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put("key", key);
+        UriTemplate template = new UriTemplate("/l/{key}");
+        return template.expand(uriVariables).toString();
     }
 
     public String redirect(String shortUrl) {
