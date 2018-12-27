@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.tsypaev.link.domain.Link;
+import ru.tsypaev.link.exception.NoDataFoundException;
 import ru.tsypaev.link.repository.LinkRepository;
 
 import java.util.stream.Stream;
@@ -19,7 +20,14 @@ public class StatsService {
     }
 
     public Link getLinkInfo(String shortUrl) {
-        return repository.findByLink(shortUrl);
+
+        Link byLink = repository.findByLink(shortUrl);
+
+        if (byLink == null) {
+            throw new NoDataFoundException();
+        }
+
+        return byLink;
     }
 
     public Stream<Link> getPageLinks(int page, int count){
