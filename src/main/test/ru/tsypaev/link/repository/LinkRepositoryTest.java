@@ -21,28 +21,35 @@ public class LinkRepositoryTest {
     @Autowired
     LinkRepository linkRepository;
 
+    private static final String YANDEX_URL = "https://www.yandex.ru";
+    private static final String RAMBLER_URL = "https://www.rambler.ru";
+    private static final String GOOGLE_URL = "https://www.google.com";
+    private static final String YANDEX_LINK = "12345";
+    private static final String RAMBLER_LINK = "123456";
+    private static final String GOOGLE_LINK = "1234567";
+
     @Test
     public void ShouldFindLinkByShortUrl(){
-        entityManager.persist(new Link("12345", "https://www.yandex.ru"));
+        entityManager.persist(new Link(YANDEX_LINK, YANDEX_URL));
 
-        Link link = linkRepository.findByLink("12345");
-        assertThat(link.getOriginal()).isEqualTo("https://www.yandex.ru");
+        Link link = linkRepository.findByLink(YANDEX_LINK);
+        assertThat(link.getOriginal()).isEqualTo(YANDEX_URL);
     }
 
     @Test
     public void ShouldFindLinkByOriginalUrl(){
-        entityManager.persist(new Link("12345", "https://www.yandex.ru"));
+        entityManager.persist(new Link(YANDEX_LINK, YANDEX_URL));
 
-        Link link = linkRepository.findByOriginal("https://www.yandex.ru");
-        assertThat(link.getLink()).isEqualTo("12345");
+        Link link = linkRepository.findByOriginal(YANDEX_URL);
+        assertThat(link.getLink()).isEqualTo(YANDEX_LINK);
     }
 
     @Test
     public void ShouldFindAllLinksOrderedByCountDesc(){
 
-        Link link1 = new Link("12345", "https://www.yandex.ru",1,2);
-        Link link2 = new Link("123456", "https://www.google.com",2,3);
-        Link link3 = new Link("1234567", "https://www.rambler.ru",3,1);
+        Link link1 = new Link(YANDEX_LINK, YANDEX_URL,1,2);
+        Link link2 = new Link(RAMBLER_LINK, GOOGLE_URL,2,3);
+        Link link3 = new Link(GOOGLE_LINK, RAMBLER_URL,3,1);
 
         entityManager.persist(link1);
         entityManager.persist(link2);
