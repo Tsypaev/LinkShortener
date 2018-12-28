@@ -7,38 +7,44 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.tsypaev.link.domain.Link;
+import ru.tsypaev.link.exception.InvalidCountException;
 import ru.tsypaev.link.exception.NoDataFoundException;
 import ru.tsypaev.link.repository.LinkRepository;
 
 import java.util.stream.Stream;
 
 @Service
-public class StatsService {
+public class StatisticService {
 
-    private static final Logger log = LogManager.getLogger(StatsService.class);
+    private static final Logger log = LogManager.getLogger(StatisticService.class);
 
     private final LinkRepository repository;
 
-    public StatsService(LinkRepository repository) {
+    public StatisticService(LinkRepository repository) {
         this.repository = repository;
     }
 
     public Link getLinkInfo(String shortUrl) {
 
-        Link byLink = repository.findByLink(shortUrl);
+        Link link = repository.findByLink(shortUrl);
 
-        if (byLink == null) {
+        if (link == null) {
             log.warn("Can't found link: " + shortUrl);
             throw new NoDataFoundException();
         }
 
-        return byLink;
+        return link;
     }
 
-    public Stream<Link> getPageLinks(int page, int count){
+    public Stream<Link> getPageLinks(int page, int count) {
+
+        if (count > 100) {
+            throw new InvalidCountException();
+        }
+
         Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "count"));
-        Page<Link> clientlist = repository.findAll(new PageRequest(page, count, sort));
-        Stream<Link> linkStream = clientlist.get();
-        return linkStream;
+        Page<Link> linkList = repository.findAll(new PageRequest(page, count, sort));
+
+        return linkList.get();
     }
 }

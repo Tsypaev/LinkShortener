@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.tsypaev.link.domain.Link;
+import ru.tsypaev.link.exception.InvalidCountException;
 import ru.tsypaev.link.exception.NoDataFoundException;
 import ru.tsypaev.link.repository.LinkRepository;
 
@@ -41,11 +42,11 @@ public class StatsServiceTest {
 
     @Test
     public void shouldReturnLinkInfo() {
-        StatsService statsService = new StatsService(linkRepository);
+        StatisticService statisticService = new StatisticService(linkRepository);
         Link link = new Link(LINK, ORIGINAL, RANK, COUNT);
         entityManager.persist(link);
 
-        Link linkInfo = statsService.getLinkInfo(LINK);
+        Link linkInfo = statisticService.getLinkInfo(LINK);
 
         assertThat(linkInfo.getLink()).isEqualTo(LINK);
         assertThat(linkInfo.getOriginal()).isEqualTo(ORIGINAL);
@@ -55,7 +56,7 @@ public class StatsServiceTest {
 
     @Test(expected = NoDataFoundException.class)
     public void shouldThrowNoDataFoundException() {
-        StatsService statsService = new StatsService(linkRepository);
+        StatisticService statsService = new StatisticService(linkRepository);
         Link link = new Link(LINK, ORIGINAL, RANK, COUNT);
         entityManager.persist(link);
 
@@ -64,7 +65,7 @@ public class StatsServiceTest {
 
     @Test
     public void shouldReturnPageLinks() {
-        StatsService statsService = new StatsService(linkRepository);
+        StatisticService statsService = new StatisticService(linkRepository);
 
         Link link1 = new Link(YANDEX_LINK, YANDEX_URL,1,2);
         Link link2 = new Link(RAMBLER_LINK, GOOGLE_URL,2,3);
@@ -80,7 +81,7 @@ public class StatsServiceTest {
 
     @Test
     public void shouldReturnPageLinks1() {
-        StatsService statsService = new StatsService(linkRepository);
+        StatisticService statsService = new StatisticService(linkRepository);
 
         Link link1 = new Link(YANDEX_LINK, YANDEX_URL,1,2);
         Link link2 = new Link(RAMBLER_LINK, GOOGLE_URL,2,3);
@@ -95,6 +96,11 @@ public class StatsServiceTest {
 
         assertThat(objects[0]).isEqualTo(link2);
         assertThat(objects[1]).isEqualTo(link1);
+    }
 
+    @Test(expected = InvalidCountException.class)
+    public void shouldReturnInvalidCountException() {
+        StatisticService statsService = new StatisticService(linkRepository);
+        statsService.getPageLinks(PAGE_VALUE, 101);
     }
 }
