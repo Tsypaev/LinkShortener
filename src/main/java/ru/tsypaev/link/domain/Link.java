@@ -75,4 +75,11 @@ public class Link {
         this.link = link;
         this.original = original;
     }
+
+    public Link(String link, String original, int rank, int count) {
+        this.link = link;
+        this.original = original;
+        this.rank = rank;
+        this.count = count;
+    }
 }
