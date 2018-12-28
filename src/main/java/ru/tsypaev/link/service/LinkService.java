@@ -1,5 +1,7 @@
 package ru.tsypaev.link.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
 import ru.tsypaev.link.domain.Link;
@@ -22,6 +24,8 @@ import static com.google.common.hash.Hashing.murmur3_32;
 @Service
 public class LinkService {
 
+    private static final Logger log = LogManager.getLogger(LinkService.class);
+
     private final LinkRepository repository;
 
     public LinkService(LinkRepository repository) {
@@ -34,19 +38,24 @@ public class LinkService {
         String originalLink = originalLinkMap.get("original");
 
         if (!originalLink.startsWith("http://") && !originalLink.startsWith("https://")) {
+            log.warn("Invalid original link: " + originalLink);
             throw new InvalidUrlException();
         }
 
         Link originalLinkFromDb = repository.findByOriginal(originalLink);
 
         if (originalLinkFromDb != null) {
+            log.warn("This link already exist in DB: " + originalLinkFromDb.getOriginal());
             throw new ExistInDbException();
         }
 
         String shortUrl = murmur3_32().hashString(originalLink, StandardCharsets.UTF_8).toString();
+        log.debug("Short url was generated: " + shortUrl);
 
         repository.save(new Link(shortUrl, originalLink));
+        log.debug("Short url was save in DB");
         updateRanks();
+        log.debug("Ranks was updated");
 
         Map<String, String> shortLinkMap = new HashMap<>();
 
@@ -71,14 +80,17 @@ public class LinkService {
         Link link = repository.findByLink(shortUrl);
 
         if (link == null) {
+            log.warn("Can't find original link by this short link: " + shortUrl);
             throw new NoDataFoundException();
         }
 
         int counter = link.getCount();
         link.setCount(new AtomicInteger(counter).incrementAndGet());
+        log.debug("Increment count for link: " + shortUrl);
 
         repository.save(link);
         updateRanks();
+        log.debug("Ranks was updated");
 
         return new URI(link.getOriginal());
     }
