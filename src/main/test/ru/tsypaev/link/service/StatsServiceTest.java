@@ -37,7 +37,7 @@ public class StatsServiceTest {
     private static final int COUNT = 256;
     private static final int RANK = 128;
     private static final int PAGE_VALUE = 0;
-    private static final int COUNT_VALUE = 1;
+    private static final int COUNT_VALUE = 2;
 
     @Test
     public void shouldReturnLinkInfo() {
@@ -75,7 +75,26 @@ public class StatsServiceTest {
         entityManager.persist(link3);
 
         Stream<Link> pageLinks = statsService.getPageLinks(PAGE_VALUE, COUNT_VALUE);
-
         assertThat(pageLinks.count()).isEqualTo(COUNT_VALUE);
+    }
+
+    @Test
+    public void shouldReturnPageLinks1() {
+        StatsService statsService = new StatsService(linkRepository);
+
+        Link link1 = new Link(YANDEX_LINK, YANDEX_URL,1,2);
+        Link link2 = new Link(RAMBLER_LINK, GOOGLE_URL,2,3);
+        Link link3 = new Link(GOOGLE_LINK, RAMBLER_URL,3,1);
+
+        entityManager.persist(link1);
+        entityManager.persist(link2);
+        entityManager.persist(link3);
+
+        Stream<Link> pageLinks = statsService.getPageLinks(PAGE_VALUE, COUNT_VALUE);
+        Object[] objects = pageLinks.toArray();
+
+        assertThat(objects[0]).isEqualTo(link2);
+        assertThat(objects[1]).isEqualTo(link1);
+
     }
 }
