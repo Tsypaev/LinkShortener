@@ -43,7 +43,7 @@ public class StatisticService {
         }
 
         Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "count"));
-        Page<Link> linkList = repository.findAll(new PageRequest(page, count, sort));
+        Page<Link> linkList = repository.findAll(new PageRequest(page-1, count, sort));
 
         return linkList.get();
     }

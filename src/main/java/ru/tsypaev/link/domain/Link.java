@@ -25,7 +25,7 @@ public class Link {
     private int rank;
 
     @Column(name = "count", nullable = false)
-    private int count = new AtomicInteger(0).get();
+    private int count = 0;
 
     @JsonIgnore
     public Long getId() {

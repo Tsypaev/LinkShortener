@@ -85,7 +85,7 @@ public class LinkService {
         }
 
         int counter = link.getCount();
-        link.setCount(new AtomicInteger(counter).incrementAndGet());
+        link.setCount(++counter);
         log.debug("Increment count for link: " + shortUrl);
 
         repository.save(link);
