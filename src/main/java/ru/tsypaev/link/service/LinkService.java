@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
 import ru.tsypaev.link.domain.Link;
-import ru.tsypaev.link.exception.ExistInDbException;
 import ru.tsypaev.link.exception.InvalidUrlException;
 import ru.tsypaev.link.exception.NoDataFoundException;
 import ru.tsypaev.link.repository.LinkRepository;
@@ -85,15 +84,19 @@ public class LinkService {
             throw new NoDataFoundException();
         }
 
-        int counter = link.getCount();
-        link.setCount(++counter);
-        log.debug("Increment count for link: " + shortUrl);
+        incrementCount(shortUrl, link);
 
         repository.save(link);
         updateRanks();
         log.debug("Ranks was updated");
 
         return new URI(link.getOriginal());
+    }
+
+    private synchronized void incrementCount(String shortUrl, Link link) {
+        int counter = link.getCount();
+        link.setCount(++counter);
+        log.debug("Increment count for link: " + shortUrl);
     }
 
     private void updateRanks() {
