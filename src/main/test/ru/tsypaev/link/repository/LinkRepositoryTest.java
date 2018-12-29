@@ -8,6 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.tsypaev.link.domain.Link;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class LinkRepositoryTest {
     private static final String GOOGLE_LINK = "1234567";
 
     @Test
-    public void ShouldFindLinkByShortUrl(){
+    public void ShouldFindLinkByShortUrl() {
         entityManager.persist(new Link(YANDEX_LINK, YANDEX_URL));
 
         Link link = linkRepository.findByLink(YANDEX_LINK);
@@ -37,7 +38,7 @@ public class LinkRepositoryTest {
     }
 
     @Test
-    public void ShouldFindLinkByOriginalUrl(){
+    public void ShouldFindLinkByOriginalUrl() {
         entityManager.persist(new Link(YANDEX_LINK, YANDEX_URL));
 
         Link link = linkRepository.findByOriginal(YANDEX_URL);
@@ -45,11 +46,10 @@ public class LinkRepositoryTest {
     }
 
     @Test
-    public void ShouldFindAllLinksOrderedByCountDesc(){
-
-        Link link1 = new Link(YANDEX_LINK, YANDEX_URL,1,2);
-        Link link2 = new Link(RAMBLER_LINK, GOOGLE_URL,2,3);
-        Link link3 = new Link(GOOGLE_LINK, RAMBLER_URL,3,1);
+    public void ShouldFindAllLinksOrderedByCountDesc() {
+        Link link1 = new Link(YANDEX_LINK, YANDEX_URL, 1, 2);
+        Link link2 = new Link(RAMBLER_LINK, GOOGLE_URL, 2, 3);
+        Link link3 = new Link(GOOGLE_LINK, RAMBLER_URL, 3, 1);
 
         entityManager.persist(link1);
         entityManager.persist(link2);

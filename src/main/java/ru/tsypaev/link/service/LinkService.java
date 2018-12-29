@@ -16,7 +16,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.google.common.hash.Hashing.murmur3_32;
 
@@ -106,7 +105,6 @@ public class LinkService {
     }
 
     private List<Link> getOrderLinkList() {
-
         return repository.findAllByOrderByCountDesc();
     }
 }

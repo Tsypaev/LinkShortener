@@ -23,7 +23,6 @@ public class RedirectController {
 
     @GetMapping("/l/{shortUrl}")
     ResponseEntity redirect(@PathVariable String shortUrl) throws URISyntaxException {
-
         URI original = linkService.getOriginalByShortUrl(shortUrl);
 
         return ResponseEntity.status(HttpStatus.FOUND).location(original).build();

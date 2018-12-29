@@ -22,7 +22,6 @@ public class GenerateControllerTest {
 
     @Test
     public void shouldReturnShortLink() throws Exception {
-
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/generate")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -33,6 +32,6 @@ public class GenerateControllerTest {
         String result = this.mockMvc.perform(requestBuilder).andReturn().getResponse().getContentAsString();
         String expected = "{\"link\":\"/l/d9c9bc4c\"}";
 
-        JSONAssert.assertEquals(expected,result,false);
+        JSONAssert.assertEquals(expected, result, false);
     }
 }

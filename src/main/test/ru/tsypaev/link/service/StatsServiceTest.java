@@ -67,9 +67,9 @@ public class StatsServiceTest {
     public void shouldReturnPageLinks() {
         StatisticService statsService = new StatisticService(linkRepository);
 
-        Link link1 = new Link(YANDEX_LINK, YANDEX_URL,1,2);
-        Link link2 = new Link(RAMBLER_LINK, GOOGLE_URL,2,3);
-        Link link3 = new Link(GOOGLE_LINK, RAMBLER_URL,3,1);
+        Link link1 = new Link(YANDEX_LINK, YANDEX_URL, 1, 2);
+        Link link2 = new Link(RAMBLER_LINK, GOOGLE_URL, 2, 3);
+        Link link3 = new Link(GOOGLE_LINK, RAMBLER_URL, 3, 1);
 
         entityManager.persist(link1);
         entityManager.persist(link2);
@@ -83,9 +83,9 @@ public class StatsServiceTest {
     public void shouldReturnPageLinks1() {
         StatisticService statsService = new StatisticService(linkRepository);
 
-        Link link1 = new Link(YANDEX_LINK, YANDEX_URL,1,2);
-        Link link2 = new Link(RAMBLER_LINK, GOOGLE_URL,2,3);
-        Link link3 = new Link(GOOGLE_LINK, RAMBLER_URL,3,1);
+        Link link1 = new Link(YANDEX_LINK, YANDEX_URL, 1, 2);
+        Link link2 = new Link(RAMBLER_LINK, GOOGLE_URL, 2, 3);
+        Link link3 = new Link(GOOGLE_LINK, RAMBLER_URL, 3, 1);
 
         entityManager.persist(link1);
         entityManager.persist(link2);

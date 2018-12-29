@@ -40,9 +40,10 @@ public class StatisticControllerTest {
     private static final String RAMBLER_URL = "https://www.rambler.ru";
     private static final String YANDEX_LINK = "d9c9bc4c";
     private static final String RAMBLER_LINK = "123456";
+
     @Test
     public void shouldGetLinkInfo() throws Exception {
-        Link link = new Link(YANDEX_LINK,YANDEX_URL);
+        Link link = new Link(YANDEX_LINK, YANDEX_URL);
         Mockito.when(statisticService.getLinkInfo(YANDEX_LINK)).thenReturn(link);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -52,19 +53,18 @@ public class StatisticControllerTest {
         String result = mockMvc.perform(requestBuilder).andReturn().getResponse().getContentAsString();
         String expected = "{\"link\":\"" + YANDEX_LINK + "\",\"original\":\"" + YANDEX_URL + "\",\"rank\":0,\"count\":0}";
 
-        JSONAssert.assertEquals(expected,result,false);
+        JSONAssert.assertEquals(expected, result, false);
     }
 
     @Test
     public void shouldReturnPageWithLinks() throws Exception {
+        Link link1 = new Link(YANDEX_LINK, YANDEX_URL, 1, 5);
+        Link link2 = new Link(RAMBLER_LINK, RAMBLER_URL, 3, 1);
 
-        Link link1 = new Link(YANDEX_LINK,YANDEX_URL,1,5);
-        Link link2 = new Link(RAMBLER_LINK,RAMBLER_URL,3,1);
-
-        Stream<Link> links = Stream.of(link1,link2);
+        Stream<Link> links = Stream.of(link1, link2);
 
 
-        Mockito.when(statisticService.getPageLinks(1,2)).thenReturn(links);
+        Mockito.when(statisticService.getPageLinks(1, 2)).thenReturn(links);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/stats/?page=1&count=2")
@@ -74,6 +74,6 @@ public class StatisticControllerTest {
         String expected = "[{\"link\":\"" + YANDEX_LINK + "\",\"original\":\"" + YANDEX_URL + "\",\"rank\":1,\"count\":5}," +
                 "{\"link\":\"" + RAMBLER_LINK + "\",\"original\":\"" + RAMBLER_URL + "\",\"rank\":3,\"count\":1}]";
 
-        JSONAssert.assertEquals(expected,result,false);
+        JSONAssert.assertEquals(expected, result, false);
     }
 }
