@@ -9,7 +9,7 @@
 		<relativePath/>
 	</parent>
 	<groupId>ru.tsypaev</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>LinkService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>LinkShortener</name>
 	<description>Test Project</description>
