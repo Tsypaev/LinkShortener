@@ -43,12 +43,12 @@ public class StatsServiceTest {
     @Test
     public void getLinkInfoShouldReturnLinkInfo() {
         StatisticService statisticService = new StatisticService(linkRepository);
-        Link link = new Link(LINK, ORIGINAL, RANK, COUNT);
+        Link link = new Link("/l/" + LINK, ORIGINAL, RANK, COUNT);
         entityManager.persist(link);
 
         Link linkInfo = statisticService.getLinkInfo(LINK);
 
-        assertThat(linkInfo.getLink()).isEqualTo(LINK);
+        assertThat(linkInfo.getLink()).isEqualTo("/l/" + LINK);
         assertThat(linkInfo.getOriginal()).isEqualTo(ORIGINAL);
         assertThat(linkInfo.getRank()).isEqualTo(RANK);
         assertThat(linkInfo.getCount()).isEqualTo(COUNT);

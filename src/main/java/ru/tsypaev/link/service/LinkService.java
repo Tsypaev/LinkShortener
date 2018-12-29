@@ -43,15 +43,17 @@ public class LinkService {
 
         Link originalLinkFromDb = repository.findByOriginal(originalLink);
 
+        Map<String, String> shortLinkMap = new HashMap<>();
+
         if (originalLinkFromDb != null) {
             log.warn("This link already exist in DB: " + originalLinkFromDb.getOriginal());
-            throw new ExistInDbException();
+            shortLinkMap.put("link", originalLinkFromDb.getLink());
+            return shortLinkMap;
         }
 
         String shortUrl = murmur3_32().hashString(originalLink, StandardCharsets.UTF_8).toString();
         log.debug("Short url was generated: " + shortUrl);
 
-        Map<String, String> shortLinkMap = new HashMap<>();
 
         String shortLink = createUri(shortUrl);
         shortLinkMap.put("link", shortLink);
