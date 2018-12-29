@@ -1,10 +1,8 @@
 package ru.tsypaev.link.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
 @Table(name = "LINKS")
