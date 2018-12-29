@@ -39,6 +39,7 @@ public class StatisticService {
     public Stream<Link> getPageLinks(int page, int count) {
 
         if (count > 100) {
+            log.warn("Count have value grater then 100: " + count);
             throw new InvalidCountException();
         }
 
