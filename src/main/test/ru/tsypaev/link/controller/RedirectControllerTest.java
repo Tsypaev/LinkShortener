@@ -36,7 +36,7 @@ public class RedirectControllerTest {
     private static final String YANDEX_LINK = "d9c9bc4c";
 
     @Test
-    public void shouldRedirectOnLink() throws Exception {
+    public void redirectControllerShouldRedirectOnLink() throws Exception {
         Mockito.when(linkService.getOriginalByShortUrl(YANDEX_LINK)).thenReturn(new URI(YANDEX_URL));
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders

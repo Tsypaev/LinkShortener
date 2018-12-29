@@ -30,7 +30,7 @@ public class LinkRepositoryTest {
     private static final String GOOGLE_LINK = "1234567";
 
     @Test
-    public void ShouldFindLinkByShortUrl() {
+    public void findByLinkShouldFindLinkByShortUrl() {
         entityManager.persist(new Link(YANDEX_LINK, YANDEX_URL));
 
         Link link = linkRepository.findByLink(YANDEX_LINK);
@@ -38,7 +38,7 @@ public class LinkRepositoryTest {
     }
 
     @Test
-    public void ShouldFindLinkByOriginalUrl() {
+    public void findByOriginalShouldFindLinkByOriginalUrl() {
         entityManager.persist(new Link(YANDEX_LINK, YANDEX_URL));
 
         Link link = linkRepository.findByOriginal(YANDEX_URL);
@@ -46,7 +46,7 @@ public class LinkRepositoryTest {
     }
 
     @Test
-    public void ShouldFindAllLinksOrderedByCountDesc() {
+    public void findAllByOrderByCountDescShouldFindAllLinksOrderedByCountDesc() {
         Link link1 = new Link(YANDEX_LINK, YANDEX_URL, 1, 2);
         Link link2 = new Link(RAMBLER_LINK, GOOGLE_URL, 2, 3);
         Link link3 = new Link(GOOGLE_LINK, RAMBLER_URL, 3, 1);

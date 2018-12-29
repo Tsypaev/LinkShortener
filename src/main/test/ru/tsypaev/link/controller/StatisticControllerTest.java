@@ -42,7 +42,7 @@ public class StatisticControllerTest {
     private static final String RAMBLER_LINK = "123456";
 
     @Test
-    public void shouldGetLinkInfo() throws Exception {
+    public void statisticControllerShouldGetLinkInfo() throws Exception {
         Link link = new Link(YANDEX_LINK, YANDEX_URL);
         Mockito.when(statisticService.getLinkInfo(YANDEX_LINK)).thenReturn(link);
 
@@ -57,7 +57,7 @@ public class StatisticControllerTest {
     }
 
     @Test
-    public void shouldReturnPageWithLinks() throws Exception {
+    public void statisticControllerShouldReturnPageWithLinks() throws Exception {
         Link link1 = new Link(YANDEX_LINK, YANDEX_URL, 1, 5);
         Link link2 = new Link(RAMBLER_LINK, RAMBLER_URL, 3, 1);
 

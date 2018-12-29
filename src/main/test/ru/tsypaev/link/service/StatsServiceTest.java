@@ -41,7 +41,7 @@ public class StatsServiceTest {
     private static final int COUNT_VALUE = 2;
 
     @Test
-    public void shouldReturnLinkInfo() {
+    public void getLinkInfoShouldReturnLinkInfo() {
         StatisticService statisticService = new StatisticService(linkRepository);
         Link link = new Link(LINK, ORIGINAL, RANK, COUNT);
         entityManager.persist(link);
@@ -55,7 +55,7 @@ public class StatsServiceTest {
     }
 
     @Test(expected = NoDataFoundException.class)
-    public void shouldThrowNoDataFoundException() {
+    public void getLinkInfoShouldThrowNoDataFoundException() {
         StatisticService statsService = new StatisticService(linkRepository);
         Link link = new Link(LINK, ORIGINAL, RANK, COUNT);
         entityManager.persist(link);
@@ -64,7 +64,7 @@ public class StatsServiceTest {
     }
 
     @Test
-    public void shouldReturnPageLinks() {
+    public void getPageLinksShouldReturnLinksByCount() {
         StatisticService statsService = new StatisticService(linkRepository);
 
         Link link1 = new Link(YANDEX_LINK, YANDEX_URL, 1, 2);
@@ -80,7 +80,7 @@ public class StatsServiceTest {
     }
 
     @Test
-    public void shouldReturnPageLinks1() {
+    public void getPageLinksShouldReturnPageLinks() {
         StatisticService statsService = new StatisticService(linkRepository);
 
         Link link1 = new Link(YANDEX_LINK, YANDEX_URL, 1, 2);
@@ -99,7 +99,7 @@ public class StatsServiceTest {
     }
 
     @Test(expected = InvalidCountException.class)
-    public void shouldReturnInvalidCountException() {
+    public void getPageLinksShouldReturnInvalidCountException() {
         StatisticService statsService = new StatisticService(linkRepository);
         statsService.getPageLinks(PAGE_VALUE, 101);
     }

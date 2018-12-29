@@ -21,7 +21,7 @@ public class GenerateControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void shouldReturnShortLink() throws Exception {
+    public void generateControllerShouldReturnShortLink() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/generate")
                 .accept(MediaType.APPLICATION_JSON_UTF8)

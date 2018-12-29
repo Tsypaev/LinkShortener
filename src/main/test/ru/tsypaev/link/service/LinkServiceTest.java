@@ -33,7 +33,7 @@ public class LinkServiceTest {
     private static final String LINK = "12345";
 
     @Test
-    public void shouldCreateShortLink() {
+    public void createShortLinkShouldReturnShortLink() {
         LinkService linkService = new LinkService(linkRepository);
         Map<String, String> originalLinkMap = new HashMap<>();
         originalLinkMap.put("original", CORRECT_URL);
@@ -41,7 +41,7 @@ public class LinkServiceTest {
     }
 
     @Test(expected = InvalidUrlException.class)
-    public void shouldThrowInvalidUrlException() {
+    public void createShortLinkShouldThrowInvalidUrlException() {
         LinkService linkService = new LinkService(linkRepository);
         Map<String, String> originalLinkMap = new HashMap<>();
         originalLinkMap.put("original", INCORRECT_URL);
@@ -49,7 +49,7 @@ public class LinkServiceTest {
     }
 
     @Test(expected = ExistInDbException.class)
-    public void shouldThrowExistInDbException() {
+    public void createShortLinkShouldThrowExistInDbException() {
         entityManager.persist(new Link(LINK, CORRECT_URL));
         LinkService linkService = new LinkService(linkRepository);
         Map<String, String> originalLinkMap = new HashMap<>();
@@ -58,14 +58,14 @@ public class LinkServiceTest {
     }
 
     @Test
-    public void shouldGetOriginalByShortUrl() throws URISyntaxException {
+    public void getOriginalByShortUrlShouldReturnOriginal() throws URISyntaxException {
         LinkService linkService = new LinkService(linkRepository);
         entityManager.persist(new Link(LINK, CORRECT_URL));
         assertThat(linkService.getOriginalByShortUrl(LINK).toString()).isEqualTo(CORRECT_URL);
     }
 
     @Test
-    public void shouldGetAndIncrement() throws URISyntaxException {
+    public void getOriginalByShortUrlShouldGetAndIncrementCounter() throws URISyntaxException {
         LinkService linkService = new LinkService(linkRepository);
         int count = 0;
         Link link = new Link(LINK, CORRECT_URL, 0, count);
@@ -75,7 +75,7 @@ public class LinkServiceTest {
     }
 
     @Test(expected = NoDataFoundException.class)
-    public void shouldThrowNoDataFoundException() throws URISyntaxException {
+    public void getOriginalByShortUrlShouldThrowNoDataFoundException() throws URISyntaxException {
         LinkService linkService = new LinkService(linkRepository);
         entityManager.persist(new Link(LINK, CORRECT_URL));
         linkService.getOriginalByShortUrl(INCORRECT_URL);
