@@ -26,7 +26,7 @@ public class StatisticService {
 
     public Link getLinkInfo(String shortUrl) {
 
-        Link link = repository.findByLink(shortUrl);
+        Link link = repository.findByLink("/l/" + shortUrl);
 
         if (link == null) {
             log.warn("Can't found link: " + shortUrl);

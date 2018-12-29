@@ -51,15 +51,15 @@ public class LinkService {
         String shortUrl = murmur3_32().hashString(originalLink, StandardCharsets.UTF_8).toString();
         log.debug("Short url was generated: " + shortUrl);
 
-        repository.save(new Link(shortUrl, originalLink));
-        log.debug("Short url was save in DB");
-        updateRanks();
-        log.debug("Ranks was updated");
-
         Map<String, String> shortLinkMap = new HashMap<>();
 
         String shortLink = createUri(shortUrl);
         shortLinkMap.put("link", shortLink);
+
+        repository.save(new Link(shortLink, originalLink));
+        log.debug("Short url was save in DB");
+        updateRanks();
+        log.debug("Ranks was updated");
 
         return shortLinkMap;
     }
@@ -76,7 +76,7 @@ public class LinkService {
 
     public URI getOriginalByShortUrl(String shortUrl) throws URISyntaxException {
 
-        Link link = repository.findByLink(shortUrl);
+        Link link = repository.findByLink("/l/" + shortUrl);
 
         if (link == null) {
             log.warn("Can't find original link by this short link: " + shortUrl);
