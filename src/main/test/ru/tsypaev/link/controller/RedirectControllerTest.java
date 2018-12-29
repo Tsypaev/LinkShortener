@@ -1,66 +1,50 @@
 package ru.tsypaev.link.controller;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.tsypaev.link.domain.Link;
-import ru.tsypaev.link.repository.LinkRepository;
 import ru.tsypaev.link.service.LinkService;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-
 import java.net.URI;
-import java.net.URISyntaxException;
 
+import static org.springframework.http.HttpStatus.FOUND;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
+@WebMvcTest(RedirectController.class)
 public class RedirectControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
+    @MockBean
     private LinkService linkService;
 
-    @Autowired
-    private LinkRepository repository;
-
-    @Autowired
-    EntityManager entityManager;
-
-    @Before
-    public void setup() throws URISyntaxException {
-
-        entityManager.persist(new Link("d9c9bc4c","https://www.yandex.ru"));
-        this.mockMvc = standaloneSetup(new GenerateController(linkService)).build();
-//        Mockito.when(repository.findByLink("d9c9bc4c")).thenReturn(new Link("d9c9bc4c","https://www.yandex.ru"));
-    }
+    private static final String YANDEX_URL = "https://www.yandex.ru";
+    private static final String YANDEX_LINK = "d9c9bc4c";
 
     @Test
-    public void shouldRedirect() throws Exception {
-        LinkService mock = org.mockito.Mockito.mock(LinkService.class);
-        Mockito.when(mock.getOriginalByShortUrl("d9c9bc4c")).thenReturn(new URI("https://www.yandex.ru"));
-        this.mockMvc.perform(
-                get("/l/d9c9bc4c")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .characterEncoding("UTF-8"))
-                .andExpect(status().isFound())
-                .andExpect(content().string("d"));
+    public void shouldRedirectOnLink() throws Exception {
+        Mockito.when(linkService.getOriginalByShortUrl(YANDEX_LINK)).thenReturn(new URI(YANDEX_URL));
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/l/" + YANDEX_LINK)
+                .accept(MediaType.APPLICATION_JSON);
+
+        int status = mockMvc.perform(requestBuilder).andReturn().getResponse().getStatus();
+        assert status == FOUND.value();
+
     }
 }

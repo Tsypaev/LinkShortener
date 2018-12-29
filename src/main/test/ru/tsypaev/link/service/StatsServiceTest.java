@@ -37,7 +37,7 @@ public class StatsServiceTest {
     private static final String LINK = "123456";
     private static final int COUNT = 256;
     private static final int RANK = 128;
-    private static final int PAGE_VALUE = 0;
+    private static final int PAGE_VALUE = 1;
     private static final int COUNT_VALUE = 2;
 
     @Test
