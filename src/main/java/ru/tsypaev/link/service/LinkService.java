@@ -75,7 +75,7 @@ public class LinkService {
         return template.expand(uriMap).toString();
     }
 
-    public URI getOriginalByShortUrl(String shortUrl) throws URISyntaxException {
+    public synchronized URI getOriginalByShortUrl(String shortUrl) throws URISyntaxException {
 
         Link link = repository.findByLink("/l/" + shortUrl);
 
@@ -93,7 +93,7 @@ public class LinkService {
         return new URI(link.getOriginal());
     }
 
-    private synchronized void incrementCount(String shortUrl, Link link) {
+    private void incrementCount(String shortUrl, Link link) {
         int counter = link.getCount();
         link.setCount(++counter);
         log.debug("Increment count for link: " + shortUrl);
