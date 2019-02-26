@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Tsypaev/LinkShortener.svg?branch=master)](https://travis-ci.org/Tsypaev/LinkShortener)
 # LinkShortener
 Для старта проекта нужно:
 1) Распаковать проект;
