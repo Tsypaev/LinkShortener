@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/Tsypaev/LinkShortener.svg?branch=master)](https://travis-ci.org/Tsypaev/LinkShortener)
-# LinkShortener
+# link-shortener
 Для старта проекта нужно:
 1) Распаковать проект;
 2) Открыть его в Intellige Idea(Данный проект нужно открывать как maven проект);
