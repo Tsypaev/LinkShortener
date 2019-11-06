@@ -4,4 +4,4 @@
 
 `mvn package` - build the project.
 
-`java - jar <jar_name>` - start the rpoject.
+`java - jar <jar_name>` - start the project.
